@@ -5,40 +5,6 @@
 
 #define EXTRA(l) 0.2*l	// A 20% will be added in order to set the outter circumference
 
-enum Edge{
-	TOP,
-	TOP_RIGHT,
-	BOTTOM_RIGHT,
-	BOTTOM,
-	BOTTOM_LEFT,
-	TOP_LEFT	
-};
-
-class ColorPattern{
-public:
-	ColorPattern(std::vector<sf::Color> pattern) :
-		pattern(pattern)
-	{
-
-	}
-	~ColorPattern();
-
-	sf::Color getEdgeColor(Edge edge){
-		return pattern[edge];
-	}
-
-	void setEdgeColor(Edge edge, sf::Color color){
-		pattern[edge] = color;
-	}
-
-	sf::Color operator[](int i){
-		return pattern[i];
-	}
-
-private:
-	std::vector<sf::Color> pattern;
-};
-
 class Hexagon
 {
 public:
@@ -58,8 +24,17 @@ private:
 public:
 	std::vector<sf::Vertex> getVertices();
 	bool isInOutterCircle(sf::Vector2f point);
-	void draw(sf::RenderTarget* target, ColorPattern pattern);
+
+	/**
+		\brief This function draws a hexagon. You can specify a border color pettern. 
+		This pattern must be specified with sf::Color, clockwise. The first one will
+		be the color of the top border.
+		\param target Where the hexagon will be drawn in;
+		\param pattern Border color pattern. Transparent by default.
+	*/
+	void draw(sf::RenderTarget* target, std::vector<sf::Color> pattern = std::vector<sf::Color>(0));
 	sf::Color getColor();
+	void setColor(sf::Color color);
 	
 	bool operator==(const Hexagon* other){
 		if (center == other->center){
@@ -73,4 +48,4 @@ public:
 	}
 };
 
-Hexagon EmptyHexagon(sf::Vector2f(0, 0), 0, sf::Color::Transparent);
+//Hexagon EmptyHexagon(sf::Vector2f(0, 0), 0, sf::Color::Transparent);

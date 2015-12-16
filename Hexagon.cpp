@@ -37,30 +37,21 @@ bool Hexagon::isInOutterCircle(sf::Vector2f point)
 	return outter.isInside(point);
 }
 
-void Hexagon::draw(sf::RenderTarget* target, ColorPattern pattern)
+void Hexagon::draw(sf::RenderTarget* target, std::vector<sf::Color> pattern)
 {
 	sf::VertexArray temp(sf::PrimitiveType::Lines);
-
-	temp.append(this->vertices[0]);		// top border	(-)
-	temp.append(this->vertices[1]);
-
-	temp.append(this->vertices[1]);		// top-right border	(\)
-	temp.append(this->vertices[2]);
-
-	temp.append(this->vertices[2]);		// bottom-right border (/)
-	temp.append(this->vertices[3]);
-
-	temp.append(this->vertices[3]);		// bottom border (_)
-	temp.append(this->vertices[4]);
-
-	temp.append(this->vertices[4]);		// bottom-left border	(\)
-	temp.append(this->vertices[5]);
-
-	temp.append(this->vertices[5]);		// top-left border(/)
-	temp.append(this->vertices[0]);
-
+	for (int i = 0; i < vertices.size(); ++i){
+		temp.append(vertices[i]);
+		temp.append(vertices[(i+1) % 6]);
+	}
+	bool noBorders = (pattern.size() == 0);
 	for (int i = 0; i < temp.getVertexCount(); ++i){
-		temp[i].color = pattern[i];
+		if (noBorders){
+			temp[i].color = sf::Color::Transparent;
+		}
+		else{
+			temp[i].color = pattern[(i / 2) % 6];
+		}
 	}
 
 	target->draw(shape);
@@ -75,4 +66,8 @@ std::vector<sf::Vertex> Hexagon::getVertices(){
 
 sf::Color Hexagon::getColor(){
 	return color;
+}
+
+void Hexagon::setColor(sf::Color color){
+	this->color = color;
 }

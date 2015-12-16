@@ -41,7 +41,7 @@ void HexMatrix::generateMatrix(){
 int HexMatrix::checkCombos(){
 	sf::Vector2f tmpCursor(0, 0);
 
-
+	return 0;
 }
 
 void HexMatrix::refillMatrix(){
