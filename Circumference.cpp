@@ -14,7 +14,7 @@ Circumference::~Circumference()
 }
 
 
-bool Circumference::isInside(sf::Vector2f point)
+bool Circumference::isInside(sf::Vector2i point)
 {
 	if (point.x >= 0 && point.y >= 0){
 		float a = (point.x - center.x) * (point.x - center.x);

@@ -32,7 +32,7 @@ Hexagon::~Hexagon()
 }
 
 
-bool Hexagon::isInOutterCircle(sf::Vector2f point)
+bool Hexagon::isInOutterCircle(sf::Vector2i point)
 {
 	return outter.isInside(point);
 }
@@ -47,13 +47,13 @@ void Hexagon::draw(sf::RenderTarget* target, std::vector<sf::Color> pattern)
 	bool noBorders = (pattern.size() == 0);
 	for (int i = 0; i < temp.getVertexCount(); ++i){
 		if (noBorders){
-			temp[i].color = sf::Color::Transparent;
+			temp[i].color = sf::Color::Black;
 		}
 		else{
 			temp[i].color = pattern[(i / 2) % 6];
 		}
 	}
-
+	shape.setFillColor(color);
 	target->draw(shape);
 	target->draw(temp);
 	

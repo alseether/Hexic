@@ -13,17 +13,19 @@ public:
 
 	static sf::Texture hexagonTexture;
 
-private:
 	sf::Vector2f center;
-	float h;
 	float side;
+
+private:
+	float h;
 	std::vector<sf::Vertex> vertices;
 	Circumference outter;
 	sf::ConvexShape shape;
 	sf::Color color;
 public:
+
 	std::vector<sf::Vertex> getVertices();
-	bool isInOutterCircle(sf::Vector2f point);
+	bool isInOutterCircle(sf::Vector2i point);
 
 	/**
 		\brief This function draws a hexagon. You can specify a border color pettern. 

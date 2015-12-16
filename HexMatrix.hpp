@@ -1,37 +1,35 @@
 #pragma once
-
-#include "Hexagon.hpp"
 #include "SFML\Graphics.hpp"
+#include "Hexagon.hpp"
 #include <random>
 
 class HexMatrix
 {
 public:
-	HexMatrix(unsigned int sizeX, unsigned int sizeY, unsigned side);
+	HexMatrix(sf::Vector2f position, unsigned int width = 10, unsigned int height = 8, unsigned int side = 50);
 	~HexMatrix();
+
 private:
-	unsigned int sizeX;
-	unsigned int sizeY;
+	const int initialColors = 5; // Red, Blue, Green, Yellow, Magenta
+	sf::Vector2f position;
+	unsigned int width;
+	unsigned int height;
 	unsigned int side;
 	float h;
-public:
-	Hexagon getHexagon(int x, int y);
-private:
-	sf::Vector2i cursor;
-	std::vector<Hexagon> hexMap;
+	std::vector<Hexagon> matrix;
 
-	void generateMatrix();
-	int checkCombos();
-	void refillMatrix();
-	sf::Color randomColor();
+	bool checkCombos(int colors);
 
-	std::mt19937 gen;
-	std::uniform_int_distribution<> dis;
 public:
-	void setCursor(sf::Vector2i cursor);
+
 	void draw(sf::RenderTarget* target);
-	void rotateRight();
-	void rotateLeft();
+	std::vector<int> getSelectedHexagons(sf::Vector2i pointer);
+	Hexagon getHexagon(unsigned int i);
+	Hexagon getHexagon(unsigned int row, unsigned int col);
 
+	void turnLeft(std::vector<int> selected);
+	void turnRight(std::vector<int> selected);
+
+	int solveCombos();
 };
 

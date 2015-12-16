@@ -1,16 +1,53 @@
 #include "HexMatrix.hpp"
 
+sf::Color getColorFromInt(int i){
+	switch (i){
+	case 1:
+		return sf::Color::Red;
+	case 2:
+		return sf::Color::Blue;
+	case 3:
+		return sf::Color::Green;
+	case 4:
+		return sf::Color::Yellow;
+	case 5:
+		return sf::Color::Magenta;
+	default:
+		return sf::Color::Black;
+	}
+}
 
-HexMatrix::HexMatrix(unsigned int sizeX, unsigned int sizeY, unsigned int side)
+
+HexMatrix::HexMatrix(sf::Vector2f position, unsigned int width, unsigned int height, unsigned int side) :
+position(position)
 {
-	std::random_device rd;
-	gen = std::mt19937(rd());
-	dis = std::uniform_int_distribution<>(0, 7);
-
-	this->sizeX = sizeX;
-	this->sizeY = sizeY;
+	this->width = width;
+	this->height = height;
+	this->side = side;
 	h = sqrt((3 * side*side) / 4);
-	generateMatrix();
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<int> dis(1, initialColors);
+
+	sf::Color prevColor = sf::Color::Transparent;
+	for (int i = 0; i < height; ++i){
+		for (int j = 0; j < width; ++j){
+			sf::Color color;
+			sf::Vector2f center;			
+			if (j % 2 == 0){
+				center = sf::Vector2f(position.x + (1.5 * side*j), position.y + h + (i * 2 * h));
+			}
+			else{
+				center = sf::Vector2f(position.x + (1.5*side*j), position.y + (i * 2 * h));
+			}
+			do{
+				color = getColorFromInt(dis(gen));
+			} while (color == prevColor);
+			matrix.push_back(Hexagon(center, side, color));
+			prevColor = color;
+		}
+	}
 }
 
 
@@ -18,84 +55,106 @@ HexMatrix::~HexMatrix()
 {
 }
 
-void HexMatrix::generateMatrix(){
-	for (int i = 0; i < sizeY; ++i){
-		for (int j = 0; j < sizeX; ++j){
-			sf::Vector2f center;
-			if (j % 2 == 0){
-				center = sf::Vector2f((1.5*side*j), (i * 2 * h));
-				hexMap.push_back(Hexagon(center, side, randomColor()));
-			}
-			else{
-				center = sf::Vector2f((1.5 * side*j), h + (i * 2 * h));
-				hexMap.push_back(Hexagon(center, side, randomColor()));
-			}
+bool HexMatrix::checkCombos(int colors){
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<int> dis(1, colors);
+	bool changes = false;
+	for (int i = 0; i < matrix.size() - width; ++i){
+		if (matrix[i].getColor() == matrix[i + 1].getColor() && matrix[i].getColor() == matrix[i + 10].getColor()){
+			matrix[i].setColor(getColorFromInt(dis(gen)));
+			changes = true;
+		}
+		else if (i != matrix.size() - width -1 && matrix[i].getColor() == matrix[i + 10].getColor() && matrix[i].getColor() == matrix[i + 11].getColor()){
+			matrix[i].setColor(getColorFromInt(dis(gen)));
+			changes = true;
 		}
 	}
-	while (checkCombos() != 0){
-		refillMatrix();
-	}
-	return;
+	return changes;
 }
 
-int HexMatrix::checkCombos(){
-	sf::Vector2f tmpCursor(0, 0);
 
+void HexMatrix::draw(sf::RenderTarget* target){
+	for (int i = 0; i < matrix.size(); ++i){
+		matrix[i].draw(target);
+	}
+}
+
+std::vector<int> HexMatrix::getSelectedHexagons(sf::Vector2i pointer){
+	std::vector<int> ret;
+	for (int i = 0; i < matrix.size(); ++i){
+		if (matrix[i].isInOutterCircle(pointer)){
+			ret.push_back(i);
+		}
+	}
+	return ret;
+}
+
+Hexagon HexMatrix::getHexagon(unsigned int i){
+	return matrix[i];
+}
+
+Hexagon HexMatrix::getHexagon(unsigned int row, unsigned int col){
+	return matrix[row * width + col];
+}
+
+void HexMatrix::turnLeft(std::vector<int> selected){
+	if (selected[0] + 1 == selected[1]){
+		sf::Color aux = matrix[selected[0]].getColor();
+		matrix[selected[0]].setColor(matrix[selected[1]].getColor());
+		matrix[selected[1]].setColor(matrix[selected[2]].getColor());
+		matrix[selected[2]].setColor(aux);
+	}
+	else{
+		sf::Color aux = matrix[selected[0]].getColor();
+		matrix[selected[0]].setColor(matrix[selected[2]].getColor());
+		matrix[selected[2]].setColor(matrix[selected[1]].getColor());
+		matrix[selected[1]].setColor(aux);
+	}
+}
+void HexMatrix::turnRight(std::vector<int> selected){
+	if (selected[0] + 1 == selected[1]){
+		sf::Color aux = matrix[selected[0]].getColor();
+		matrix[selected[0]].setColor(matrix[selected[2]].getColor());
+		matrix[selected[2]].setColor(matrix[selected[1]].getColor());
+		matrix[selected[1]].setColor(aux);
+	}
+	else{
+		sf::Color aux = matrix[selected[0]].getColor();
+		matrix[selected[0]].setColor(matrix[selected[1]].getColor());
+		matrix[selected[1]].setColor(matrix[selected[2]].getColor());
+		matrix[selected[2]].setColor(aux);
+	}
+}
+
+int HexMatrix::solveCombos(){
+	bool changes;
+	do{
+		changes = false;
+		for (int i = 0; i < matrix.size() - width; ++i){
+			if (i%width < width - 1 && matrix[i].getColor() == matrix[i + 1].getColor() && matrix[i].getColor() == matrix[i + 11].getColor()){
+				// 3 Hex Group facing left combo
+				int k = i, h = i + 11;
+				while (k%width > 0){
+					matrix[k].setColor(matrix[k - width].getColor());
+					matrix[h].setColor(matrix[h - width].getColor());
+					matrix[k+1].setColor(matrix[k+1 - width].getColor());
+					k-=width;
+				}
+				changes = true;
+			}
+			else if (i != matrix.size() - width - 1 && matrix[i].getColor() == matrix[i + 10].getColor() && matrix[i].getColor() == matrix[i + 11].getColor()){
+				// 3 Hex Group facing right combo
+				int k = i, h = i + 1;
+				while (h%width > 0){
+					matrix[k + 10].setColor(matrix[k].getColor());
+					matrix[k].setColor(matrix[k - width].getColor());
+					matrix[k].setColor(matrix[k - width].getColor());
+					h-=width;
+				}
+				changes = true;
+			}
+		}
+	} while (changes);
 	return 0;
-}
-
-void HexMatrix::refillMatrix(){
-	for (int i = 0; i < sizeY; ++i){
-		for (int j = 0; j < sizeX; ++j){
-			if (hexMap[i*sizeX + j] == &EmptyHexagon){
-				sf::Vector2f center;
-				center = sf::Vector2f((1.5*side*j), (i * 2 * h));
-				hexMap[i*sizeX + j] = Hexagon(center, side, randomColor());
-			}
-		}
-	}
-}
-
-sf::Color HexMatrix::randomColor(){
-	int rnd = dis(gen);
-	switch (rnd){
-	case 0:
-		return sf::Color::Black;
-	case 1:
-		return sf::Color::Blue;
-	case 2:
-		return sf::Color::Cyan;
-	case 3:
-		return sf::Color::Green;
-	case 4:
-		return sf::Color::Magenta;
-	case 5:
-		return sf::Color::Red;
-	case 6:
-		return sf::Color::White;
-	case 7:
-		return sf::Color::Yellow;
-	}
-}
-
-
-Hexagon HexMatrix::getHexagon(int x, int y)
-{
-	return hexMap[y*sizeX + x];
-}
-
-
-void HexMatrix::setCursor(sf::Vector2i cursor)
-{
-}
-
-void HexMatrix::draw(sf::RenderTarget* target)
-{
-}
-
-void HexMatrix::rotateRight(){
-
-}
-void HexMatrix::rotateLeft(){
-
 }
