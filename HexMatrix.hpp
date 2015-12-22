@@ -30,6 +30,6 @@ public:
 	void turnLeft(std::vector<int> selected);
 	void turnRight(std::vector<int> selected);
 
-	int solveCombos();
+	int solveCombos(sf::RenderTarget* target);
 };
 

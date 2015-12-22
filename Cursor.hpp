@@ -1,25 +1,33 @@
 #pragma once
 
 #include "SFML\Graphics.hpp"
+#include "Hexagon.hpp"
+
+/* Patterns for 3 Hexagons groups */
+const std::vector<sf::Color> pattern3UpLeft = { sf::Color::White, sf::Color::White, sf::Color::Black, sf::Color::Black, sf::Color::White, sf::Color::White };
+const std::vector<sf::Color> pattern3UpRight = { sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::Black, sf::Color::Black, sf::Color::White };
+const std::vector<sf::Color> pattern3DownLeft = { sf::Color::Black, sf::Color::Black, sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::White };
+const std::vector<sf::Color> pattern3DownRight = { sf::Color::Black, sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::Black };
+const std::vector<sf::Color> pattern3Left = { sf::Color::White, sf::Color::Black, sf::Color::Black, sf::Color::White, sf::Color::White, sf::Color::White };
+const std::vector<sf::Color> pattern3Right = { sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::Black, sf::Color::Black };
+
+/* Patterns for 7 Hexagon groups (star selection)*/
+const std::vector<sf::Color> pattern6Up = { sf::Color::White, sf::Color::White, sf::Color::Black, sf::Color::Black, sf::Color::Black, sf::Color::White };
+const std::vector<sf::Color> pattern6UpRight = { sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::Black, sf::Color::Black, sf::Color::Black };
+const std::vector<sf::Color> pattern6DownRight = { sf::Color::Black, sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::Black, sf::Color::Black };
+const std::vector<sf::Color> pattern6Down = { sf::Color::Black, sf::Color::Black, sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::Black };
+const std::vector<sf::Color> pattern6DownLeft = { sf::Color::Black, sf::Color::Black, sf::Color::Black, sf::Color::White, sf::Color::White, sf::Color::White };
+const std::vector<sf::Color> pattern6UpLeft = { sf::Color::White, sf::Color::Black, sf::Color::Black, sf::Color::Black, sf::Color::White, sf::Color::White };
 
 class Cursor
 {
 public:
-	Cursor(unsigned int sizeX, unsigned int sizeY);
+	Cursor();
 	~Cursor();
 private:
-	std::vector<sf::Vector2i> group;
-	unsigned int sizeX;
-	unsigned int sizeY;
-	unsigned int posX;
-	unsigned int posY;
-	unsigned int maxX;
-	unsigned int maxY;
+	
+
 public:
-	std::vector<sf::Vector2i>* getGroup();
-	void moveLeft();
-	void moveRight();
-	void moveUp();
-	void moveDown();
+	void highlightGroup(sf::RenderTarget* target, std::vector<int> selected, std::vector<Hexagon> group);
 };
 

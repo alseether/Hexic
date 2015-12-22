@@ -127,34 +127,68 @@ void HexMatrix::turnRight(std::vector<int> selected){
 	}
 }
 
-int HexMatrix::solveCombos(){
+int HexMatrix::solveCombos(sf::RenderTarget* target){
 	bool changes;
+	int punt = 0;
 	do{
 		changes = false;
 		for (int i = 0; i < matrix.size() - width; ++i){
-			if (i%width < width - 1 && matrix[i].getColor() == matrix[i + 1].getColor() && matrix[i].getColor() == matrix[i + 11].getColor()){
+			if (i%width < width - 1 && matrix[i].getColor() == matrix[i + 1].getColor() && matrix[i].getColor() == matrix[i + width +1].getColor() && matrix[i].getColor() != sf::Color::Transparent){
 				// 3 Hex Group facing left combo
-				int k = i, h = i + 11;
-				while (k%width > 0){
-					matrix[k].setColor(matrix[k - width].getColor());
-					matrix[h].setColor(matrix[h - width].getColor());
-					matrix[k+1].setColor(matrix[k+1 - width].getColor());
-					k-=width;
-				}
+				matrix[i].setColor(sf::Color::Transparent);
+				matrix[i+1].setColor(sf::Color::Transparent);
+				matrix[i+ width + 1].setColor(sf::Color::Transparent);
+				punt += 30;
 				changes = true;
 			}
-			else if (i != matrix.size() - width - 1 && matrix[i].getColor() == matrix[i + 10].getColor() && matrix[i].getColor() == matrix[i + 11].getColor()){
+			else if (i != matrix.size() - width - 1 && matrix[i].getColor() == matrix[i + 1].getColor() && matrix[i].getColor() == matrix[i + width].getColor() && matrix[i].getColor() != sf::Color::Transparent){
 				// 3 Hex Group facing right combo
-				int k = i, h = i + 1;
-				while (h%width > 0){
-					matrix[k + 10].setColor(matrix[k].getColor());
-					matrix[k].setColor(matrix[k - width].getColor());
-					matrix[k].setColor(matrix[k - width].getColor());
-					h-=width;
-				}
+				matrix[i].setColor(sf::Color::Transparent);
+				matrix[i + 1].setColor(sf::Color::Transparent);
+				matrix[i + width].setColor(sf::Color::Transparent);
+				punt += 30;
+				changes = true;
+			}
+			else if (i != matrix.size() - width - 1 && matrix[i].getColor() == matrix[i + width].getColor() && matrix[i].getColor() == matrix[i + width + 1].getColor() && matrix[i].getColor() != sf::Color::Transparent){
+				// 3 Hex Group facing right combo
+				matrix[i].setColor(sf::Color::Transparent);
+				matrix[i + width].setColor(sf::Color::Transparent);
+				matrix[i + width + 1].setColor(sf::Color::Transparent);
+				punt += 30;
+				changes = true;
+			}
+			else if (i != matrix.size() - width - 1 && matrix[i].getColor() == matrix[i + width -1].getColor() && matrix[i].getColor() == matrix[i + width].getColor() && matrix[i].getColor() != sf::Color::Transparent){
+				// 3 Hex Group facing right combo
+				matrix[i].setColor(sf::Color::Transparent);
+				matrix[i + width -1].setColor(sf::Color::Transparent);
+				matrix[i + width].setColor(sf::Color::Transparent);
+				punt += 30;
 				changes = true;
 			}
 		}
+		this->draw(target);
+		for (int i = 0; i < width; ++i){
+			for (int j = height - 1; j > 0; --j){
+				if (matrix[j*width + i].getColor() == sf::Color::Transparent){
+					int k = j*width + i;
+					do{
+						k -= width;
+					} while (k > width && matrix[k].getColor() == sf::Color::Transparent);
+					matrix[j*width + i].setColor(matrix[k].getColor());
+					matrix[k].setColor(sf::Color::Transparent);
+				}
+			}
+		}
+		this->draw(target);
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_int_distribution<int> dis(1, initialColors);
+		for (int i = 0; i < matrix.size(); ++i){
+			if (matrix[i].getColor() == sf::Color::Transparent){
+				matrix[i].setColor(getColorFromInt(dis(gen)));
+			}
+		}
+		this->draw(target);
 	} while (changes);
-	return 0;
+	return punt;
 }

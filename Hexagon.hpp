@@ -9,12 +9,10 @@ class Hexagon
 {
 public:
 	Hexagon(sf::Vector2f center, float side, sf::Color color);
+	Hexagon(const Hexagon* other);
 	~Hexagon();
 
 	static sf::Texture hexagonTexture;
-
-	sf::Vector2f center;
-	float side;
 
 private:
 	float h;
@@ -22,7 +20,13 @@ private:
 	Circumference outter;
 	sf::ConvexShape shape;
 	sf::Color color;
+	sf::Vector2f center;
+	float side;
 public:
+	void setCenter(sf::Vector2f cent);
+	sf::Vector2f getCenter();
+	void setSide(float newSide);
+	float getSide();
 
 	std::vector<sf::Vertex> getVertices();
 	bool isInOutterCircle(sf::Vector2i point);

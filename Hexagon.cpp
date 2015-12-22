@@ -26,6 +26,22 @@ color(color)
 	shape.setFillColor(color);
 }
 
+Hexagon::Hexagon(const Hexagon* other):
+center(other->center),
+outter(other->center, other->side + EXTRA(other->side)),	// (side + side*0.2) is the outter circumference radius
+color(other->color)
+{
+	this->setSide(other->side);
+	shape.setPointCount(6);
+	shape.setPoint(0, vertices[0].position);
+	shape.setPoint(1, vertices[1].position);
+	shape.setPoint(2, vertices[2].position);
+	shape.setPoint(3, vertices[3].position);
+	shape.setPoint(4, vertices[4].position);
+	shape.setPoint(5, vertices[5].position);
+	shape.setFillColor(other->color);
+}
+
 
 Hexagon::~Hexagon()
 {
@@ -70,4 +86,48 @@ sf::Color Hexagon::getColor(){
 
 void Hexagon::setColor(sf::Color color){
 	this->color = color;
+}
+
+void Hexagon::setCenter(sf::Vector2f cent){
+	this->center = cent;
+	vertices.clear();
+	vertices.push_back(sf::Vertex(sf::Vector2f(center.x - side / 2, center.y - h)));	// top-left vertex
+	vertices.push_back(sf::Vertex(sf::Vector2f(center.x + side / 2, center.y - h)));	// top-right vertex
+	vertices.push_back(sf::Vertex(sf::Vector2f(center.x + side, center.y)));			// right vertex
+	vertices.push_back(sf::Vertex(sf::Vector2f(center.x + side / 2, center.y + h)));	// bottom-right vertex
+	vertices.push_back(sf::Vertex(sf::Vector2f(center.x - side / 2, center.y + h)));	// bottom-left vertex
+	vertices.push_back(sf::Vertex(sf::Vector2f(center.x - side, center.y)));			// left vertex
+
+	shape.setPoint(0, vertices[0].position);
+	shape.setPoint(1, vertices[1].position);
+	shape.setPoint(2, vertices[2].position);
+	shape.setPoint(3, vertices[3].position);
+	shape.setPoint(4, vertices[4].position);
+	shape.setPoint(5, vertices[5].position);
+	shape.setFillColor(color);
+}
+sf::Vector2f Hexagon::getCenter(){
+	return this->center;
+}
+void Hexagon::setSide(float newSide){
+	this->side = newSide;
+	h = sqrt((3 * side*side) / 4);
+	vertices.clear();
+	vertices.push_back(sf::Vertex(sf::Vector2f(center.x - side / 2, center.y - h)));	// top-left vertex
+	vertices.push_back(sf::Vertex(sf::Vector2f(center.x + side / 2, center.y - h)));	// top-right vertex
+	vertices.push_back(sf::Vertex(sf::Vector2f(center.x + side, center.y)));			// right vertex
+	vertices.push_back(sf::Vertex(sf::Vector2f(center.x + side / 2, center.y + h)));	// bottom-right vertex
+	vertices.push_back(sf::Vertex(sf::Vector2f(center.x - side / 2, center.y + h)));	// bottom-left vertex
+	vertices.push_back(sf::Vertex(sf::Vector2f(center.x - side, center.y)));			// left vertex
+
+	shape.setPoint(0, vertices[0].position);
+	shape.setPoint(1, vertices[1].position);
+	shape.setPoint(2, vertices[2].position);
+	shape.setPoint(3, vertices[3].position);
+	shape.setPoint(4, vertices[4].position);
+	shape.setPoint(5, vertices[5].position);
+	shape.setFillColor(color);
+}
+float Hexagon::getSide(){
+	return this->side;
 }

@@ -1,26 +1,8 @@
 #include "Cursor.hpp"
 
 
-Cursor::Cursor(unsigned int sizeX, unsigned int sizeY)
+Cursor::Cursor()
 {
-	this->sizeX = sizeX;
-	this->sizeY = sizeY;
-	posX = 0;
-	posY = 0;
-	if (sizeY <= 2){
-		sizeY = 2;
-		maxY = 0;
-	}
-	else{
-		maxY = sizeY * 2 - 3;	// Number of vertical steps
-	}
-	if (sizeX <= 2){
-		sizeX = 2;
-		maxX = 0;
-	}
-	else{
-		maxX = sizeX * 2 - 3;	// Number of horizontal steps
-	}
 }
 
 
@@ -29,53 +11,94 @@ Cursor::~Cursor()
 }
 
 
-std::vector<sf::Vector2i>* Cursor::getGroup()
-{
-	return &this->group;
-}
-
-int whoIsHigher(std::vector<sf::Vector2i> group){
-	sf::Vector2i a = group.at(0);
-	sf::Vector2i b = group.at(1);
-	sf::Vector2i c = group.at(2);
-	if (a.x < b.x){	// if a is on the left side of the group (and alone on left)
-		if (b.y < c.y){	// if b is higher than c
-			return 1;	// b is the higher one
+void Cursor::highlightGroup(sf::RenderTarget* target, std::vector<int> selected, std::vector<Hexagon> group){
+	if (selected.size() == 3){
+		float h = sqrt((3 * group[0].getSide()*group[0].getSide()) / 4);
+		float newSide = group[0].getSide() * 1.1;
+		float newH = sqrt((3 * newSide*newSide) / 4);
+		float diff = newH - h;
+		for (int i = 0; i < group.size(); ++i){
+			group[i].setSide(newSide);
+		}
+		
+		if (selected[0] == selected[1] - 1){
+			if (selected[0] + 10 == selected[2]){
+				// 3 Hex Group facing right 
+				sf::Vector2f movUpLeft;
+				sf::Vector2f movDownLeft;
+				sf::Vector2f movRight;
+				movUpLeft.x = group[0].getCenter().x - 3;
+				movDownLeft.x = group[2].getCenter().x - 3;
+				movRight.x = group[1].getCenter().x + 3;
+				movUpLeft.y = group[0].getCenter().y - diff;
+				movDownLeft.y = group[2].getCenter().y + diff;
+				movRight.y = group[1].getCenter().y;
+				group[0].setCenter(movUpLeft);
+				group[1].setCenter(movRight);
+				group[2].setCenter(movDownLeft);
+				group[0].draw(target, pattern3UpLeft);
+				group[1].draw(target, pattern3Right);
+				group[2].draw(target, pattern3DownLeft);
+			}
+			else{
+				// 3 Hex Group facing left
+				sf::Vector2f movLeft;
+				sf::Vector2f movUpRight;
+				sf::Vector2f movDownRight;
+				movLeft.x = group[0].getCenter().x - 3;
+				movUpRight.x = group[1].getCenter().x + 3;
+				movDownRight.x = group[2].getCenter().x + 3;
+				movLeft.y = group[0].getCenter().y;
+				movUpRight.y = group[1].getCenter().y - diff;
+				movDownRight.y = group[2].getCenter().y + diff;
+				group[0].setCenter(movLeft);
+				group[1].setCenter(movUpRight);
+				group[2].setCenter(movDownRight);
+				group[0].draw(target, pattern3Left);
+				group[1].draw(target, pattern3UpRight);
+				group[2].draw(target, pattern3DownRight);
+			}
 		}
 		else{
-			return 2;	// c is the higher one
+			if (selected[0] + 10 == selected[1]){
+				// 3 Hex Group facing right
+				sf::Vector2f movUpLeft;
+				sf::Vector2f movDownLeft;
+				sf::Vector2f movRight;
+				movUpLeft.x = group[0].getCenter().x - 3;
+				movDownLeft.x = group[1].getCenter().x - 3;
+				movRight.x = group[2].getCenter().x + 3;
+				movUpLeft.y = group[0].getCenter().y - diff;
+				movDownLeft.y = group[1].getCenter().y + diff;
+				movRight.y = group[2].getCenter().y;
+				group[0].setCenter(movUpLeft);
+				group[1].setCenter(movDownLeft);
+				group[2].setCenter(movRight);
+				group[0].draw(target, pattern3UpLeft);
+				group[1].draw(target, pattern3DownLeft);
+				group[2].draw(target, pattern3Right);
+			}
+			else{
+				// 3 Hex Group facing left
+				sf::Vector2f movLeft;
+				sf::Vector2f movUpRight;
+				sf::Vector2f movDownRight;
+				movLeft.x = group[1].getCenter().x - 3;
+				movUpRight.x = group[0].getCenter().x + 3;
+				movDownRight.x = group[2].getCenter().x + 3;
+				movLeft.y = group[1].getCenter().y;
+				movUpRight.y = group[0].getCenter().y - diff;
+				movDownRight.y = group[2].getCenter().y + diff;
+				group[0].setCenter(movUpRight);
+				group[1].setCenter(movLeft);
+				group[2].setCenter(movDownRight);
+				group[0].draw(target, pattern3UpRight);
+				group[1].draw(target, pattern3Left);
+				group[2].draw(target, pattern3DownRight);
+			}
 		}
 	}
-	else if (a.x == b.x){	// if a and b are both on the same side
-		return (a.y < b.y) ? 0 : 1;
-	}
-	else{	// a is alone on the right side
-		return (b.y < c.y) ? 1 : 2;
-	}
-}
+	else{
 
-void Cursor::moveLeft(){
-	if (posX > 0){
-
-		posX--;
-	}
-}
-void Cursor::moveRight(){
-	if (posX < maxX){
-
-		posX++;
-	}
-}
-void Cursor::moveUp(){
-	if (posY > 0){
-
-		posY--;
-	}
-}
-void Cursor::moveDown(){
-	if (posY < maxY){
-		int higher = whoIsHigher(group);
-		
-		posY++;
 	}
 }
