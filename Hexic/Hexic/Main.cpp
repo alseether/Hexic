@@ -1,6 +1,6 @@
 #include "Hexagon.hpp"
 #include "HexMatrix.hpp"
-#include "SFML\Graphics.hpp"
+#include <SFML\Graphics.hpp>
 #include "Cursor.hpp"
 #include <iostream>
 
@@ -10,7 +10,7 @@
 #define SIDE 50
 
 int main(){
-	sf::VideoMode videoMode = sf::VideoMode::getFullscreenModes().at(2);
+	sf::VideoMode videoMode = sf::VideoMode(800,600);
 	sf::RenderWindow window(videoMode, "Hexic");
 	Cursor cursor;
 	std::vector<int> selected;
