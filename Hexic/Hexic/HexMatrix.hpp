@@ -6,7 +6,7 @@
 class HexMatrix
 {
 public:
-	HexMatrix(sf::Vector2f position, unsigned int width = 10, unsigned int height = 8, unsigned int side = 50);
+	HexMatrix(sf::Vector2f position, unsigned int width = 10, unsigned int height = 8, unsigned int side = 10);
 	~HexMatrix();
 
 private:

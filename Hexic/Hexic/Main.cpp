@@ -20,7 +20,7 @@ int main(){
 	int lastPunt;
 	int retries = 0;
 
-	HexMatrix mat(sf::Vector2f(100, 100));
+	HexMatrix mat(sf::Vector2f(100, 100),10,8,25);
 
 	while (window.isOpen()){
 		window.clear();
