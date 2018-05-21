@@ -1,6 +1,7 @@
 #include "Hexagon.hpp"
+#include "ResourceHolder.hpp"
 
-Hexagon::Hexagon(sf::Vector2f center, float side, sf::Color color, sf::Color border) :
+Hexagon::Hexagon(sf::Vector2f center, float side, State::Context context, sf::Color color, sf::Color border) :
 center(center),
 color(color)
 {
@@ -8,6 +9,8 @@ color(color)
 	this->setSide(side);
 	this->setCenter(center);
 	shape.setFillColor(color);
+	text.setFont(context.fonts->get(Fonts::Main));
+	text.setCharacterSize(10);
 }
 
 Hexagon::Hexagon(const Hexagon* other):
@@ -29,6 +32,7 @@ void Hexagon::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
 	target.draw(shape);
 	target.draw(vertices);
+	target.draw(text);
 }
 
 sf::VertexArray Hexagon::getVertices(){
@@ -51,6 +55,13 @@ void Hexagon::setBorder(sf::Color color){
 	this->border = color;
 }
 
+std::string Hexagon::getText() const{
+	return text.getString();
+}
+void Hexagon::setText(std::string text){
+	this->text.setString(text);
+}
+
 void Hexagon::setCenter(sf::Vector2f cent){
 	this->center = cent;
 	vertices.clear();
@@ -70,6 +81,10 @@ void Hexagon::setCenter(sf::Vector2f cent){
 	shape.setPoint(3, vertices[3].position);
 	shape.setPoint(4, vertices[4].position);
 	shape.setPoint(5, vertices[5].position);
+
+	text.setPosition(center);
+	centerOrigin(text);
+	text.setPosition(center);
 }
 sf::Vector2f Hexagon::getCenter(){
 	return this->center;

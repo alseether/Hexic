@@ -5,7 +5,7 @@
 
 GameState::GameState(StateStack& stack, Context context) :
 State(stack,context),
-hex(sf::Vector2f(20,20), 10,8,20)
+hex(sf::Vector2f(20,20), context, 10,8,20)
 {
 }
 

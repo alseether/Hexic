@@ -18,7 +18,7 @@ sf::Color getColorFromInt(int i){
 }
 
 
-HexMatrix::HexMatrix(sf::Vector2f position, unsigned int width, unsigned int height, unsigned int side) :
+HexMatrix::HexMatrix(sf::Vector2f position, State::Context context, unsigned int width, unsigned int height, unsigned int side) :
 position(position)
 {
 	this->width = width;
@@ -45,7 +45,8 @@ position(position)
 			do{
 				color = getColorFromInt(dis(gen));
 			} while (color == prevColor);
-			matrix.push_back(std::make_unique<Hexagon>(center, side, color));
+			matrix.push_back(std::make_unique<Hexagon>(center, side, context, color));
+			matrix.at(matrix.size() - 1)->setText(std::to_string(matrix.size()-1));
 			prevColor = color;
 		}
 	}
