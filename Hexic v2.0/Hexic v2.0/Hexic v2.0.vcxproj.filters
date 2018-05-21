@@ -66,6 +66,9 @@
     <ClCompile Include="HexMatrix.cpp">
       <Filter>Archivos de código fuente\Game</Filter>
     </ClCompile>
+    <ClCompile Include="Cursor.cpp">
+      <Filter>Archivos de código fuente\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -111,6 +114,9 @@
       <Filter>Archivos de encabezado\Game</Filter>
     </ClInclude>
     <ClInclude Include="HexMatrix.hpp">
+      <Filter>Archivos de encabezado\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Cursor.hpp">
       <Filter>Archivos de encabezado\Game</Filter>
     </ClInclude>
   </ItemGroup>
