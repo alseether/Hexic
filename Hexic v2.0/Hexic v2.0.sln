@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Hexic", "Hexic\Hexic.vcxproj", "{589CAD2E-FA80-468F-96E5-9AA059F7D81C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Hexic v2.0", "Hexic v2.0\Hexic v2.0.vcxproj", "{477490D3-A449-4970-9085-9D1DE6475146}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{589CAD2E-FA80-468F-96E5-9AA059F7D81C}.Debug|Win32.ActiveCfg = Debug|Win32
-		{589CAD2E-FA80-468F-96E5-9AA059F7D81C}.Debug|Win32.Build.0 = Debug|Win32
-		{589CAD2E-FA80-468F-96E5-9AA059F7D81C}.Release|Win32.ActiveCfg = Release|Win32
-		{589CAD2E-FA80-468F-96E5-9AA059F7D81C}.Release|Win32.Build.0 = Release|Win32
+		{477490D3-A449-4970-9085-9D1DE6475146}.Debug|Win32.ActiveCfg = Debug|Win32
+		{477490D3-A449-4970-9085-9D1DE6475146}.Debug|Win32.Build.0 = Debug|Win32
+		{477490D3-A449-4970-9085-9D1DE6475146}.Release|Win32.ActiveCfg = Release|Win32
+		{477490D3-A449-4970-9085-9D1DE6475146}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

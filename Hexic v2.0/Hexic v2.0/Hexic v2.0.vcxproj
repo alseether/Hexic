@@ -11,9 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{589CAD2E-FA80-468F-96E5-9AA059F7D81C}</ProjectGuid>
+    <ProjectGuid>{477490D3-A449-4970-9085-9D1DE6475146}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Hexic</RootNamespace>
+    <RootNamespace>Hexicv2.0</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -78,21 +78,34 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Circumference.cpp" />
-    <ClCompile Include="Cursor.cpp" />
+    <ClCompile Include="GameState.cpp" />
     <ClCompile Include="Hexagon.cpp" />
     <ClCompile Include="HexMatrix.cpp" />
     <ClCompile Include="Main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Circumference.hpp" />
-    <ClInclude Include="ColorPattern.hpp" />
-    <ClInclude Include="Cursor.hpp" />
-    <ClInclude Include="Hexagon.hpp" />
-    <ClInclude Include="HexMatrix.hpp" />
+    <ClCompile Include="MenuState.cpp" />
+    <ClCompile Include="PauseState.cpp" />
+    <ClCompile Include="State.cpp" />
+    <ClCompile Include="StateStack.cpp" />
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="ResourceHolder.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Button.hpp" />
+    <ClInclude Include="Game.hpp" />
+    <ClInclude Include="GameState.hpp" />
+    <ClInclude Include="Hexagon.hpp" />
+    <ClInclude Include="HexMatrix.hpp" />
+    <ClInclude Include="MenuState.hpp" />
+    <ClInclude Include="PauseState.hpp" />
+    <ClInclude Include="Rand.hpp" />
+    <ClInclude Include="ResourceHolder.hpp" />
+    <ClInclude Include="ResourceIdentifiers.hpp" />
+    <ClInclude Include="State.hpp" />
+    <ClInclude Include="StateStack.hpp" />
+    <ClInclude Include="Utils.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
@@ -104,5 +117,7 @@
     <Import Project="..\packages\sfml-graphics.2.4.2.0\build\native\sfml-graphics.targets" Condition="Exists('..\packages\sfml-graphics.2.4.2.0\build\native\sfml-graphics.targets')" />
     <Import Project="..\packages\sfml-audio.redist.2.4.2.0\build\native\sfml-audio.redist.targets" Condition="Exists('..\packages\sfml-audio.redist.2.4.2.0\build\native\sfml-audio.redist.targets')" />
     <Import Project="..\packages\sfml-audio.2.4.2.0\build\native\sfml-audio.targets" Condition="Exists('..\packages\sfml-audio.2.4.2.0\build\native\sfml-audio.targets')" />
+    <Import Project="..\packages\sfml-network.redist.2.4.2.0\build\native\sfml-network.redist.targets" Condition="Exists('..\packages\sfml-network.redist.2.4.2.0\build\native\sfml-network.redist.targets')" />
+    <Import Project="..\packages\sfml-network.2.4.2.0\build\native\sfml-network.targets" Condition="Exists('..\packages\sfml-network.2.4.2.0\build\native\sfml-network.targets')" />
   </ImportGroup>
 </Project>
